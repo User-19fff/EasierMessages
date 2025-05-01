@@ -46,7 +46,9 @@ public class EasierMessages {
     @NotNull
     @Contract("_ -> new")
     public static MessageBuilder translateMessage(String message) {
-        return new MessageBuilder(LEGACY_SERIALIZER.deserialize(message));
+        MessageBuilder builder = empty();
+        builder.append(message);
+        return builder;
     }
 
     /**
