@@ -1,0 +1,1 @@
+typeSearchIndex = [{"l":"All Classes and Interfaces","u":"allclasses-index.html"},{"p":"net.coma112.easiermessages","l":"EasierMessages"},{"p":"net.coma112.easiermessages","l":"EasierMessagesPlugin"},{"p":"net.coma112.easiermessages","l":"EasierMessages.MessageBuilder"}];updateSearchResults();

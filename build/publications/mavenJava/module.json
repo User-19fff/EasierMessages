@@ -1,0 +1,100 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "net.coma112",
+    "module": "EasierMessages",
+    "version": "1.0.0",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "8.8"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 21,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api"
+      },
+      "files": [
+        {
+          "name": "EasierMessages-1.0.0.jar",
+          "url": "EasierMessages-1.0.0.jar",
+          "size": 5573,
+          "sha512": "9fa38da9ec9a5acd575697d0b05d12e848746e0ee4eb8deaaf4d56540a9ae781540c7ac61ebcaca9788bfa976ca3254e9947c56783f64dfccaa84e9f68dce6f7",
+          "sha256": "ab9a62a17cf584a01881342509182e4cdf278cb1c877cdbe73805c43e8fca227",
+          "sha1": "6f94d902f9d2c8b86789e6271fa7731a0384f2f5",
+          "md5": "fb73ccc90073ff0adbe9aee4c9178f30"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 21,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "EasierMessages-1.0.0.jar",
+          "url": "EasierMessages-1.0.0.jar",
+          "size": 5573,
+          "sha512": "9fa38da9ec9a5acd575697d0b05d12e848746e0ee4eb8deaaf4d56540a9ae781540c7ac61ebcaca9788bfa976ca3254e9947c56783f64dfccaa84e9f68dce6f7",
+          "sha256": "ab9a62a17cf584a01881342509182e4cdf278cb1c877cdbe73805c43e8fca227",
+          "sha1": "6f94d902f9d2c8b86789e6271fa7731a0384f2f5",
+          "md5": "fb73ccc90073ff0adbe9aee4c9178f30"
+        }
+      ]
+    },
+    {
+      "name": "javadocElements",
+      "attributes": {
+        "org.gradle.category": "documentation",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.docstype": "javadoc",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "EasierMessages-1.0.0-javadoc.jar",
+          "url": "EasierMessages-1.0.0-javadoc.jar",
+          "size": 91583,
+          "sha512": "c00ebdc77b8a3483376acb87d578599385fd261060366b9354344f590fd7545bdbacfcb73b9de45fa67698a654624d7de347094ea3b882c1477fde08bedb2e01",
+          "sha256": "bbeeb16c3f76e02338e5765950a1ca913630642ae09548f318c1886d3bbe332f",
+          "sha1": "9407815a06d3ccde05de49b7a84197c19d825b03",
+          "md5": "0288fb6369bf458875c146f188f8ad57"
+        }
+      ]
+    },
+    {
+      "name": "sourcesElements",
+      "attributes": {
+        "org.gradle.category": "documentation",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.docstype": "sources",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "EasierMessages-1.0.0-sources.jar",
+          "url": "EasierMessages-1.0.0-sources.jar",
+          "size": 3428,
+          "sha512": "8a070f0766029eba8b903bbfec0d75bc9459e8aa1f45bad22957ed40ebee296c97c57dff946e0465befd5b9f5963b65b17bf76126f2245725cc68c5cdcfba98a",
+          "sha256": "690bbafd41c26930987895a3ef0fe6060b02e2614306c07c1ca0ae543dfce702",
+          "sha1": "34174e4be62f22e5a5329311fb31b766f0592ed0",
+          "md5": "979614f2493ac287a319027f5c264122"
+        }
+      ]
+    }
+  ]
+}
