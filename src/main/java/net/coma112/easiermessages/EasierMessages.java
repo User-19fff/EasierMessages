@@ -20,7 +20,7 @@ import java.util.regex.Pattern;
  * text formatting options.
  *
  * @author coma112
- * @version 1.0.0
+ * @version 1.0.1
  */
 public class EasierMessages {
     private static final LegacyComponentSerializer LEGACY_SERIALIZER = LegacyComponentSerializer.builder()
@@ -28,14 +28,6 @@ public class EasierMessages {
             .hexColors()
             .useUnusualXRepeatedCharacterHexFormat()
             .build();
-
-    private static final Pattern CLICK_PATTERN = Pattern.compile("<click>(.*?)</click>\\((.+?)\\)");
-    private static final Pattern HOVER_PATTERN = Pattern.compile("<hover>(.*?)</hover>\\((.+?)\\)");
-    private static final Pattern SUGGEST_PATTERN = Pattern.compile("<suggest>(.*?)</suggest>\\((.+?)\\)");
-    private static final Pattern URL_PATTERN = Pattern.compile("<url>(.*?)</url>\\((.+?)\\)");
-
-    private static final Pattern HOVER_CLICK_PATTERN = Pattern.compile("<hover><click>(.*?)</click>\\((.+?)\\)</hover>\\((.+?)\\)");
-    private static final Pattern CLICK_HOVER_PATTERN = Pattern.compile("<click><hover>(.*?)</hover>\\((.+?)\\)</click>\\((.+?)\\)");
 
     /**
      * Creates a new MessageBuilder instance from text containing color codes.
@@ -97,14 +89,8 @@ public class EasierMessages {
          * @return The MessageBuilder instance to support chained calls
          */
         public MessageBuilder append(String text) {
-            Component processedComponent = processInteractiveElements(text);
-
-            if (processedComponent != null) builder.append(processedComponent);
-            else {
-                Component translatedText = LEGACY_SERIALIZER.deserialize(text);
-                builder.append(translatedText);
-            }
-
+            Component processedComponent = MessageProcessor.processAllInteractiveElements(text);
+            builder.append(processedComponent);
             return this;
         }
 
@@ -239,73 +225,15 @@ public class EasierMessages {
 
         /**
          * Processes interactive elements in a text.
+         * This method is kept for backward compatibility but redirects to MessageProcessor.
          *
          * @param text The text to process
          * @return The processed Component, or null if it doesn't contain interactive elements
+         * @deprecated Use MessageProcessor.processAllInteractiveElements instead
          */
-        @Nullable
-        private Component processInteractiveElements(@NotNull String text) {
-            Matcher hoverClickMatcher = HOVER_CLICK_PATTERN.matcher(text);
-            if (hoverClickMatcher.find()) {
-                String displayText = hoverClickMatcher.group(1);
-                String command = hoverClickMatcher.group(2);
-                String hoverText = hoverClickMatcher.group(3);
-
-                if (!command.startsWith("/")) command = "/" + command;
-
-                return LEGACY_SERIALIZER.deserialize(displayText)
-                        .clickEvent(ClickEvent.runCommand(command))
-                        .hoverEvent(HoverEvent.showText(LEGACY_SERIALIZER.deserialize(hoverText)));
-            }
-
-            Matcher clickHoverMatcher = CLICK_HOVER_PATTERN.matcher(text);
-            if (clickHoverMatcher.find()) {
-                String displayText = clickHoverMatcher.group(1);
-                String hoverText = clickHoverMatcher.group(2);
-                String command = clickHoverMatcher.group(3);
-
-                if (!command.startsWith("/")) command = "/" + command;
-
-                return LEGACY_SERIALIZER.deserialize(displayText)
-                        .hoverEvent(HoverEvent.showText(LEGACY_SERIALIZER.deserialize(hoverText)))
-                        .clickEvent(ClickEvent.runCommand(command));
-            }
-
-            Matcher clickMatcher = CLICK_PATTERN.matcher(text);
-            if (clickMatcher.find()) {
-                String displayText = clickMatcher.group(1);
-                String command = clickMatcher.group(2);
-
-                if (!command.startsWith("/")) command = "/" + command;
-                return LEGACY_SERIALIZER.deserialize(displayText)
-                        .clickEvent(ClickEvent.runCommand(command));
-            }
-
-            Matcher hoverMatcher = HOVER_PATTERN.matcher(text);
-            if (hoverMatcher.find()) {
-                String displayText = hoverMatcher.group(1);
-                String hoverText = hoverMatcher.group(2);
-                return LEGACY_SERIALIZER.deserialize(displayText)
-                        .hoverEvent(HoverEvent.showText(LEGACY_SERIALIZER.deserialize(hoverText)));
-            }
-
-            Matcher suggestMatcher = SUGGEST_PATTERN.matcher(text);
-            if (suggestMatcher.find()) {
-                String displayText = suggestMatcher.group(1);
-                String command = suggestMatcher.group(2);
-                return LEGACY_SERIALIZER.deserialize(displayText)
-                        .clickEvent(ClickEvent.suggestCommand(command));
-            }
-
-            Matcher urlMatcher = URL_PATTERN.matcher(text);
-            if (urlMatcher.find()) {
-                String displayText = urlMatcher.group(1);
-                String url = urlMatcher.group(2);
-                return LEGACY_SERIALIZER.deserialize(displayText)
-                        .clickEvent(ClickEvent.openUrl(url));
-            }
-
-            return null;
+        @Deprecated
+        private @NotNull Component processInteractiveElements(@NotNull String text) {
+            return MessageProcessor.processAllInteractiveElements(text);
         }
     }
 }
