@@ -1,8 +1,9 @@
 plugins {
     id 'java-library'
+    id 'maven-publish'  // Fontos a publikáláshoz
 }
 
-group = 'net.coma112'
+group = 'com.github.User-19fff'  // Változtasd meg a GitHub felhasználónevedre
 version = '1.0.0'
 
 repositories {
@@ -53,5 +54,18 @@ processResources {
     filteringCharset 'UTF-8'
     filesMatching('plugin.yml') {
         expand props
+    }
+}
+
+// Ez a rész fontos a JitPack számára
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = project.group
+            artifactId = project.name
+            version = project.version
+
+            from components.java
+        }
     }
 }
