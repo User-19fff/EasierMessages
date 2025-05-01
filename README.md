@@ -97,6 +97,13 @@ Component complexPattern = EasierMessages.translateMessage(
 ).build();
 ```
 
+### Formats
+
+- <url>Message</url>(url)
+- <click>Message</click>(command with /)
+- <hover>Message</hover>(hover message)
+- <suggest>Message</suggest>(suggest)
+
 ## License
 
 [MIT](LICENSE)
