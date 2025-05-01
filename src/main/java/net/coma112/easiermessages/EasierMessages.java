@@ -15,9 +15,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Segédosztály interaktív üzenetek egyszerű létrehozásához Minecraft szervereken.
- * A kód támogatja a színeket, hover és kattintás eseményeket, és egyéb Minecraft-specifikus
- * szövegformázási lehetőségeket.
+ * Helper class for simple creation of interactive messages on Minecraft servers.
+ * The code supports colors, hover and click events, and other Minecraft-specific
+ * text formatting options.
  *
  * @author coma112
  * @version 1.0.0
@@ -38,10 +38,10 @@ public class EasierMessages {
     private static final Pattern CLICK_HOVER_PATTERN = Pattern.compile("<click><hover>(.*?)</hover>\\((.+?)\\)</click>\\((.+?)\\)");
 
     /**
-     * Létrehoz egy új MessageBuilder példányt egy színkódokat tartalmazó szövegből.
+     * Creates a new MessageBuilder instance from text containing color codes.
      *
-     * @param message A színkódokat és formázásokat tartalmazó szöveg
-     * @return Új MessageBuilder példány
+     * @param message The text containing color codes and formatting
+     * @return New MessageBuilder instance
      */
     @NotNull
     @Contract("_ -> new")
@@ -50,10 +50,10 @@ public class EasierMessages {
     }
 
     /**
-     * Létrehoz egy új MessageBuilder példányt egy már létező Component objektumból.
+     * Creates a new MessageBuilder instance from an existing Component object.
      *
-     * @param component A forrás Component
-     * @return Új MessageBuilder példány
+     * @param component The source Component
+     * @return New MessageBuilder instance
      */
     @NotNull
     @Contract("_ -> new")
@@ -62,9 +62,9 @@ public class EasierMessages {
     }
 
     /**
-     * Létrehoz egy új, üres MessageBuilder példányt.
+     * Creates a new empty MessageBuilder instance.
      *
-     * @return Új MessageBuilder példány
+     * @return New MessageBuilder instance
      */
     @NotNull
     @Contract(" -> new")
@@ -73,15 +73,15 @@ public class EasierMessages {
     }
 
     /**
-     * Builder osztály interaktív szöveges üzenetek létrehozásához.
+     * Builder class for creating interactive text messages.
      */
     public static class MessageBuilder {
         private final TextComponent.Builder builder;
 
         /**
-         * Létrehoz egy új MessageBuilder példányt.
+         * Creates a new MessageBuilder instance.
          *
-         * @param component Az alap komponens, amiből építkezünk
+         * @param component The base component to build from
          */
         public MessageBuilder(Component component) {
             if (component instanceof TextComponent textComponent) this.builder = textComponent.toBuilder();
@@ -89,10 +89,10 @@ public class EasierMessages {
         }
 
         /**
-         * Hozzáfűz egy szöveget az üzenethez, feldolgozva az esetleges interaktív elemeket.
+         * Appends text to the message, processing any interactive elements.
          *
-         * @param text A hozzáfűzendő szöveg
-         * @return A MessageBuilder példány a láncolt hívások támogatásához
+         * @param text The text to append
+         * @return The MessageBuilder instance to support chained calls
          */
         public MessageBuilder append(String text) {
             Component processedComponent = processInteractiveElements(text);
@@ -107,10 +107,10 @@ public class EasierMessages {
         }
 
         /**
-         * Hozzáfűz egy Component-et az üzenethez.
+         * Appends a Component to the message.
          *
-         * @param component A hozzáfűzendő komponens
-         * @return A MessageBuilder példány a láncolt hívások támogatásához
+         * @param component The component to append
+         * @return The MessageBuilder instance to support chained calls
          */
         public MessageBuilder append(Component component) {
             builder.append(component);
@@ -118,10 +118,10 @@ public class EasierMessages {
         }
 
         /**
-         * Hozzáfűz egy másik MessageBuilder által épített komponenst.
+         * Appends a component built by another MessageBuilder.
          *
-         * @param messageBuilder A hozzáfűzendő MessageBuilder
-         * @return A MessageBuilder példány a láncolt hívások támogatásához
+         * @param messageBuilder The MessageBuilder to append
+         * @return The MessageBuilder instance to support chained calls
          */
         public MessageBuilder append(@NotNull MessageBuilder messageBuilder) {
             builder.append(messageBuilder.build());
@@ -129,11 +129,11 @@ public class EasierMessages {
         }
 
         /**
-         * Hozzáfűz egy kattintható szöveget az üzenethez.
+         * Appends clickable text to the message.
          *
-         * @param text A megjelenítendő szöveg
-         * @param command A futtatandó parancs kattintáskor
-         * @return A MessageBuilder példány a láncolt hívások támogatásához
+         * @param text The text to display
+         * @param command The command to run when clicked
+         * @return The MessageBuilder instance to support chained calls
          */
         public MessageBuilder appendClickable(String text, @NotNull String command) {
             Component translatedText = LEGACY_SERIALIZER.deserialize(text);
@@ -144,11 +144,11 @@ public class EasierMessages {
         }
 
         /**
-         * Hozzáfűz egy fölé vihető (hover) szöveget az üzenethez.
+         * Appends hoverable text to the message.
          *
-         * @param text A megjelenítendő szöveg
-         * @param hoverText A hover szöveg
-         * @return A MessageBuilder példány a láncolt hívások támogatásához
+         * @param text The text to display
+         * @param hoverText The hover text
+         * @return The MessageBuilder instance to support chained calls
          */
         public MessageBuilder appendHoverable(String text, String hoverText) {
             Component translatedText = LEGACY_SERIALIZER.deserialize(text);
@@ -159,12 +159,12 @@ public class EasierMessages {
         }
 
         /**
-         * Hozzáfűz egy kattintható és fölé vihető szöveget az üzenethez.
+         * Appends clickable and hoverable text to the message.
          *
-         * @param text A megjelenítendő szöveg
-         * @param command A futtatandó parancs kattintáskor
-         * @param hoverText A hover szöveg
-         * @return A MessageBuilder példány a láncolt hívások támogatásához
+         * @param text The text to display
+         * @param command The command to run when clicked
+         * @param hoverText The hover text
+         * @return The MessageBuilder instance to support chained calls
          */
         public MessageBuilder appendClickableAndHoverable(String text, @NotNull String command, String hoverText) {
             Component translatedText = LEGACY_SERIALIZER.deserialize(text);
@@ -179,11 +179,11 @@ public class EasierMessages {
         }
 
         /**
-         * Hozzáfűz egy URL-re mutató szöveget az üzenethez.
+         * Appends URL-linking text to the message.
          *
-         * @param text A megjelenítendő szöveg
-         * @param url A megnyitandó URL
-         * @return A MessageBuilder példány a láncolt hívások támogatásához
+         * @param text The text to display
+         * @param url The URL to open
+         * @return The MessageBuilder instance to support chained calls
          */
         public MessageBuilder appendUrl(String text, String url) {
             Component translatedText = LEGACY_SERIALIZER.deserialize(text);
@@ -192,11 +192,11 @@ public class EasierMessages {
         }
 
         /**
-         * Hozzáfűz egy parancssort javasló szöveget az üzenethez.
+         * Appends command-suggesting text to the message.
          *
-         * @param text A megjelenítendő szöveg
-         * @param command A javasolt parancs
-         * @return A MessageBuilder példány a láncolt hívások támogatásához
+         * @param text The text to display
+         * @param command The suggested command
+         * @return The MessageBuilder instance to support chained calls
          */
         public MessageBuilder appendSuggest(String text, String command) {
             Component translatedText = LEGACY_SERIALIZER.deserialize(text);
@@ -205,10 +205,10 @@ public class EasierMessages {
         }
 
         /**
-         * Beállítja az üzenet színét.
+         * Sets the color of the message.
          *
-         * @param color A szín hexadecimális formátumban
-         * @return A MessageBuilder példány a láncolt hívások támogatásához
+         * @param color The color in hexadecimal format
+         * @return The MessageBuilder instance to support chained calls
          */
         public MessageBuilder color(String color) {
             builder.color(TextColor.fromHexString(color));
@@ -216,10 +216,10 @@ public class EasierMessages {
         }
 
         /**
-         * Hozzáad egy dekorációt az üzenethez.
+         * Adds a decoration to the message.
          *
-         * @param decoration A hozzáadandó dekoráció
-         * @return A MessageBuilder példány a láncolt hívások támogatásához
+         * @param decoration The decoration to add
+         * @return The MessageBuilder instance to support chained calls
          */
         public MessageBuilder decorate(TextDecoration decoration) {
             builder.decoration(decoration, true);
@@ -227,19 +227,19 @@ public class EasierMessages {
         }
 
         /**
-         * Felépíti a végső Component objektumot.
+         * Builds the final Component object.
          *
-         * @return A felépített Component
+         * @return The built Component
          */
         public Component build() {
             return builder.build();
         }
 
         /**
-         * Feldolgozza az interaktív elemeket egy szövegben.
+         * Processes interactive elements in a text.
          *
-         * @param text A feldolgozandó szöveg
-         * @return A feldolgozott Component, vagy null ha nincs benne interaktív elem
+         * @param text The text to process
+         * @return The processed Component, or null if it doesn't contain interactive elements
          */
         @Nullable
         private Component processInteractiveElements(@NotNull String text) {
