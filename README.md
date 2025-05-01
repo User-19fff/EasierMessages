@@ -14,7 +14,7 @@ repositories {
 }
 
 dependencies {
-    implementation("com.github.User-19fff:EasierMessages:18e3fa98a6")
+    implementation("com.github.User-19fff:EasierMessages:e4d7964ebc")
 }
 ```
 
@@ -32,7 +32,7 @@ dependencies {
 <dependency>
 <groupId>com.github.User-19fff</groupId>
 <artifactId>EasierMessages</artifactId>
-<version>18e3fa98a6</version>
+<version>e4d7964ebc</version>
 </dependency>
 ```
 
