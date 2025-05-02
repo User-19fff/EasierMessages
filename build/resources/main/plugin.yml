@@ -1,5 +1,5 @@
 name: EasierMessages
 version: '1.0.0'
 main: net.coma112.easiermessages.EasierMessagesPlugin
-api-version: '1.21'
+api-version: '1.18'
 authors: [ coma112 ]

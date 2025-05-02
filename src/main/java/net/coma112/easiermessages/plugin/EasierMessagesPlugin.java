@@ -1,4 +1,4 @@
-package net.coma112.easiermessages;
+package net.coma112.easiermessages.plugin;
 
 import org.bukkit.plugin.java.JavaPlugin;
 

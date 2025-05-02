@@ -1,5 +1,6 @@
 package net.coma112.easiermessages;
 
+import net.coma112.easiermessages.data.TextSegment;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.event.ClickEvent;
@@ -30,21 +31,6 @@ public class MessageProcessor {
     private static final Pattern URL_PATTERN = Pattern.compile("<url>(.*?)</url>\\((.+?)\\)");
     private static final Pattern HOVER_CLICK_PATTERN = Pattern.compile("<hover><click>(.*?)</click>\\((.+?)\\)</hover>\\((.+?)\\)");
     private static final Pattern CLICK_HOVER_PATTERN = Pattern.compile("<click><hover>(.*?)</hover>\\((.+?)\\)</click>\\((.+?)\\)");
-
-    /**
-     * Class to represent a text segment with its start and end indices
-     */
-    private static class TextSegment {
-        int start;
-        int end;
-        Component component;
-
-        TextSegment(int start, int end, Component component) {
-            this.start = start;
-            this.end = end;
-            this.component = component;
-        }
-    }
 
     /**
      * Process all interactive elements in the message
@@ -109,19 +95,19 @@ public class MessageProcessor {
                     .clickEvent(ClickEvent.openUrl(url));
         });
 
-        segments.sort(Comparator.comparingInt(a -> a.start));
+        segments.sort(Comparator.comparingInt(TextSegment::start));
 
         TextComponent.Builder resultBuilder = Component.text();
         int lastEnd = 0;
 
         for (TextSegment segment : segments) {
-            if (segment.start > lastEnd) {
-                String plainText = text.substring(lastEnd, segment.start);
+            if (segment.start() > lastEnd) {
+                String plainText = text.substring(lastEnd, segment.start());
                 resultBuilder.append(LEGACY_SERIALIZER.deserialize(plainText));
             }
 
-            resultBuilder.append(segment.component);
-            lastEnd = segment.end;
+            resultBuilder.append(segment.component());
+            lastEnd = segment.end();
         }
 
         if (lastEnd < text.length()) {
@@ -135,8 +121,7 @@ public class MessageProcessor {
     /**
      * Find all occurrences of a pattern and create text segments
      */
-    private static void findPattern(String text, @NotNull Pattern pattern, List<TextSegment> segments,
-                                    Function<Matcher, Component> componentBuilder) {
+    private static void findPattern(String text, @NotNull Pattern pattern, List<TextSegment> segments, Function<Matcher, Component> componentBuilder) {
         Matcher matcher = pattern.matcher(text);
         while (matcher.find()) {
             Component component = componentBuilder.apply(matcher);

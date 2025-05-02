@@ -9,18 +9,13 @@ import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
- * Helper class for simple creation of interactive messages on Minecraft servers.
- * The code supports colors, hover and click events, and other Minecraft-specific
- * text formatting options.
+ * Enhanced version of EasierMessages with improved formatting options
+ * and more flexible interactive elements
  *
  * @author coma112
- * @version 1.0.1
+ * @version 2.0.0
  */
 public class EasierMessages {
     private static final LegacyComponentSerializer LEGACY_SERIALIZER = LegacyComponentSerializer.builder()
@@ -28,20 +23,6 @@ public class EasierMessages {
             .hexColors()
             .useUnusualXRepeatedCharacterHexFormat()
             .build();
-
-    /**
-     * Creates a new MessageBuilder instance from text containing color codes.
-     *
-     * @param message The text containing color codes and formatting
-     * @return New MessageBuilder instance
-     */
-    @NotNull
-    @Contract("_ -> new")
-    public static MessageBuilder translateMessage(String message) {
-        MessageBuilder builder = empty();
-        builder.append(message);
-        return builder;
-    }
 
     /**
      * Creates a new MessageBuilder instance from an existing Component object.
@@ -84,13 +65,22 @@ public class EasierMessages {
 
         /**
          * Appends text to the message, processing any interactive elements.
+         * Supports both old and new tag formats.
          *
          * @param text The text to append
          * @return The MessageBuilder instance to support chained calls
          */
         public MessageBuilder append(String text) {
-            Component processedComponent = MessageProcessor.processAllInteractiveElements(text);
-            builder.append(processedComponent);
+            if (text.contains("<interactive:") || text.contains("<click:") ||
+                    text.contains("<hover:") || text.contains("<url:") ||
+                    text.contains("<suggest:")) {
+                Component processedComponent = EnchantedMessageProcessor.process(text);
+                builder.append(processedComponent);
+            } else if (text.contains("<click>") || text.contains("<hover>") ||
+                    text.contains("<suggest>") || text.contains("<url>")) {
+                Component processedComponent = MessageProcessor.processAllInteractiveElements(text);
+                builder.append(processedComponent);
+            } else builder.append(LEGACY_SERIALIZER.deserialize(text));
             return this;
         }
 
@@ -180,6 +170,24 @@ public class EasierMessages {
         }
 
         /**
+         * Appends URL-linking text with hover text to the message.
+         *
+         * @param text The text to display
+         * @param url The URL to open
+         * @param hoverText The hover text
+         * @return The MessageBuilder instance to support chained calls
+         */
+        public MessageBuilder appendUrlWithHover(String text, String url, String hoverText) {
+            Component translatedText = LEGACY_SERIALIZER.deserialize(text);
+            Component hoverComponent = LEGACY_SERIALIZER.deserialize(hoverText);
+
+            builder.append(translatedText
+                    .clickEvent(ClickEvent.openUrl(url))
+                    .hoverEvent(HoverEvent.showText(hoverComponent)));
+            return this;
+        }
+
+        /**
          * Appends command-suggesting text to the message.
          *
          * @param text The text to display
@@ -189,6 +197,24 @@ public class EasierMessages {
         public MessageBuilder appendSuggest(String text, String command) {
             Component translatedText = LEGACY_SERIALIZER.deserialize(text);
             builder.append(translatedText.clickEvent(ClickEvent.suggestCommand(command)));
+            return this;
+        }
+
+        /**
+         * Appends command-suggesting text with hover text to the message.
+         *
+         * @param text The text to display
+         * @param command The suggested command
+         * @param hoverText The hover text
+         * @return The MessageBuilder instance to support chained calls
+         */
+        public MessageBuilder appendSuggestWithHover(String text, String command, String hoverText) {
+            Component translatedText = LEGACY_SERIALIZER.deserialize(text);
+            Component hoverComponent = LEGACY_SERIALIZER.deserialize(hoverText);
+
+            builder.append(translatedText
+                    .clickEvent(ClickEvent.suggestCommand(command))
+                    .hoverEvent(HoverEvent.showText(hoverComponent)));
             return this;
         }
 
@@ -222,18 +248,29 @@ public class EasierMessages {
         public Component build() {
             return builder.build();
         }
+    }
 
-        /**
-         * Processes interactive elements in a text.
-         * This method is kept for backward compatibility but redirects to MessageProcessor.
-         *
-         * @param text The text to process
-         * @return The processed Component, or null if it doesn't contain interactive elements
-         * @deprecated Use MessageProcessor.processAllInteractiveElements instead
-         */
-        @Deprecated
-        private @NotNull Component processInteractiveElements(@NotNull String text) {
-            return MessageProcessor.processAllInteractiveElements(text);
+    /**
+     * Creates a new MessageBuilder instance from text containing color codes.
+     * This version automatically processes the enhanced tag format.
+     *
+     * @param message The text containing color codes and formatting
+     * @return New MessageBuilder instance
+     */
+    @NotNull
+    @Contract("_ -> new")
+    public static MessageBuilder translateMessage(@NotNull String message) {
+        if (message.contains("<interactive:") || message.contains("<click:") ||
+                message.contains("<hover:") || message.contains("<url:") ||
+                message.contains("<suggest:")) {
+            return new MessageBuilder(EnchantedMessageProcessor.process(message));
+        } else if (message.contains("<click>") || message.contains("<hover>") ||
+                message.contains("<suggest>") || message.contains("<url>")) {
+            return new MessageBuilder(MessageProcessor.processAllInteractiveElements(message));
+        } else {
+            MessageBuilder builder = empty();
+            builder.append(LEGACY_SERIALIZER.deserialize(message));
+            return builder;
         }
     }
 }
